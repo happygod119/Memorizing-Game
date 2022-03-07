@@ -1,3 +1,12 @@
+//* 遊戲狀態
+const GAME_STATE = {
+  FirstCardAwaits: "FirstCardAwaits",
+  SecondCardAwaits: "SecondCardAwaits",
+  CardsMatchFailed: "CardsMatchFailed",
+  CardsMatched: "CardsMatched",
+  GameFinished: "GameFinished",
+};
+
 //* 花色
 const Symbols = [
   "https://assets-lighthouse.alphacamp.co/uploads/image/file/17989/__.png", // 黑桃
@@ -5,6 +14,7 @@ const Symbols = [
   "https://assets-lighthouse.alphacamp.co/uploads/image/file/17991/diamonds.png", // 方塊
   "https://assets-lighthouse.alphacamp.co/uploads/image/file/17988/__.png", // 梅花
 ];
+
 //* 卡片
 const view = {
   // 牌背
@@ -37,10 +47,9 @@ const view = {
         return number;
     }
   },
-  displayCards() {
+  displayCards(indexes) {
     const rootElement = document.querySelector("#cards");
-    rootElement.innerHTML = utility
-      .getRandomNumberArray(52)
+    rootElement.innerHTML = indexes
       .map((index) => this.getCardElement(index))
       .join("");
   },
@@ -59,6 +68,19 @@ const view = {
   },
 };
 
+//* model
+const model = {
+  revealedCards: [],
+};
+
+//* controller
+const controller = {
+  currentState: GAME_STATE.FirstCardAwaits, // 加在第一行
+  generateCards() {
+    view.displayCards(utility.getRandomNumberArray(52));
+  },
+};
+
 //* 洗牌
 const utility = {
   getRandomNumberArray(count) {
@@ -74,7 +96,7 @@ const utility = {
   },
 };
 
-view.displayCards();
+controller.generateCards();
 //- 事件監聽器
 document.querySelectorAll(".card").forEach((card) => {
   card.addEventListener("click", (event) => {
