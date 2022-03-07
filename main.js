@@ -7,16 +7,20 @@ const Symbols = [
 ];
 //* 卡片
 const view = {
+  // 牌背
   getCardElement(index) {
+    return `<div data-index="${index}" class="card back"></div>`;
+  },
+  // 牌面
+  getCardContent(index) {
     //- 運算邏輯
     const number = this.transformNumber((index % 13) + 1);
     const symbol = Symbols[Math.floor(index / 13)];
     return `
-      <div class="card">
-        <p>${number}</p>
-        <img src="${symbol}" />
-        <p>${number}</p>
-      </div>`;
+    <p>${number}</p>
+    <img src="${symbol}"/>
+    <p>${number}</p>
+    `;
   },
   //- 特殊數字轉換
   transformNumber(number) {
@@ -40,6 +44,19 @@ const view = {
       .map((index) => this.getCardElement(index))
       .join("");
   },
+  //- 翻牌
+  flipCard(card) {
+    console.log(card);
+    if (card.classList.contains("back")) {
+      // 回傳正面
+      card.classList.remove("back");
+      card.innerHTML = this.getCardContent(Number(card.dataset.index)); // 改這裡
+      return;
+    }
+    // 回傳背面
+    card.classList.add("back");
+    card.innerHTML = null;
+  },
 };
 
 //* 洗牌
@@ -58,3 +75,9 @@ const utility = {
 };
 
 view.displayCards();
+//- 事件監聽器
+document.querySelectorAll(".card").forEach((card) => {
+  card.addEventListener("click", (event) => {
+    view.flipCard(card);
+  });
+});
