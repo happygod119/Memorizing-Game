@@ -75,11 +75,30 @@ const model = {
 
 //* controller
 const controller = {
-  currentState: GAME_STATE.FirstCardAwaits, // 加在第一行
-  generateCards() {
-    view.displayCards(utility.getRandomNumberArray(52));
+  currentState: GAME_STATE.FirstCardAwaits,
+  generateCards () {
+    view.displayCards(utility.getRandomNumberArray(52))
   },
-};
+  dispatchCardAction (card) {
+    if (!card.classList.contains('back')) {
+      return
+    }
+    switch (this.currentState) {
+      case GAME_STATE.FirstCardAwaits:
+        view.flipCard(card)
+        model.revealedCards.push(card)
+        this.currentState = GAME_STATE.SecondCardAwaits
+        break
+      case GAME_STATE.SecondCardAwaits:
+        view.flipCard(card)
+        model.revealedCards.push(card)
+        // 判斷配對是否成功
+        break
+    }
+    console.log('this.currentState', this.currentState)
+    console.log('revealedCards', model.revealedCards.map(card => card.dataset.index))
+  }
+}
 
 //* 洗牌
 const utility = {
