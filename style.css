@@ -1,6 +1,7 @@
 /* 牌桌 */
 #cards {
   display: flex;
+  flex-wrap: wrap; 
 }
 
 /* 卡片 */
@@ -8,6 +9,7 @@
   flex: 7% 0 1; /* 每個 item 分配容器寬度 */
   height: 8vw; /* 依視窗的寬度等比例變化 */
   border: 2px solid #e0e0e0;
+  margin: 2px;
   display: flex;
   flex-direction: column;
   justify-content: space-around;
