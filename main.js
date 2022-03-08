@@ -149,7 +149,7 @@ const controller = {
           this.currentState = GAME_STATE.CardsMatched;
           view.pairCards(...model.revealedCards);
           model.revealedCards = [];
-          if (model.score === 10) {
+          if (model.score === 20) {
             console.log("showGameFinished");
             this.currentState = GAME_STATE.GameFinished;
             view.showGameFinished();
