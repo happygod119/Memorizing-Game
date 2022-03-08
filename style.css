@@ -70,3 +70,15 @@
 .paired {
   background-color: #dae0e3;
 }
+
+/* 關鍵影格 */
+.wrong {
+  animation-name: wrongAnimation;
+  animation-duration: 0.2s;
+  animation-iteration-count: 5;
+}
+@keyframes wrongAnimation {
+  to {
+    border: 2px solid #ffd54f;
+  }
+}

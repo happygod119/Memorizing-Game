@@ -15,13 +15,13 @@ const Symbols = [
   "https://assets-lighthouse.alphacamp.co/uploads/image/file/17988/__.png", // 梅花
 ];
 
-//* 卡片
+//* view
 const view = {
-  // 牌背
+  //- 牌背
   getCardElement(index) {
     return `<div data-index="${index}" class="card back"></div>`;
   },
-  // 牌面
+  //- 牌面
   getCardContent(index) {
     //- 運算邏輯
     const number = this.transformNumber((index % 13) + 1);
@@ -81,6 +81,17 @@ const view = {
   renderTriedTimes(times) {
     document.querySelector(".tried").innerHTML = `You've tried: ${times} times`;
   },
+  //- 失敗動畫
+  appendWrongAnimation(...cards) {
+    cards.map((card) => {
+      card.classList.add("wrong");
+      card.addEventListener(
+        "animationend",
+        (event) => event.target.classList.remove("wrong"),
+        { once: true }
+      );
+    });
+  },
 };
 
 //* model
@@ -127,11 +138,7 @@ const controller = {
         } else {
           // 配對失敗
           this.currentState = GAME_STATE.CardsMatchFailed;
-          setTimeout(() => {
-            view.flipCards(...model.revealedCards);
-            model.revealedCards = [];
-            this.currentState = GAME_STATE.FirstCardAwaits;
-          }, 1000);
+          view.appendWrongAnimation(...model.revealedCards);
           // resetCards
           setTimeout(this.resetCards, 1000);
         }
@@ -166,7 +173,7 @@ const utility = {
 };
 
 controller.generateCards();
-//- 事件監聽器
+//* 事件監聽器
 document.querySelectorAll(".card").forEach((card) => {
   card.addEventListener("click", (event) => {
     controller.dispatchCardAction(card);
