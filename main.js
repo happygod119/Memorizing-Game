@@ -100,9 +100,12 @@ const view = {
       <p>Complete!</p>
       <p>Score: ${model.score}</p>
       <p>You've tried: ${model.triedTimes} times</p>
+      <button type="button" class="btn" id="reset-btn">Reset</button>
     `;
     const header = document.querySelector("#header");
     header.before(div);
+    const resetGame = document.querySelector("#reset-btn"); //*再一次的按鈕
+    resetGame.addEventListener("click", controller.resetGameClicked);
   },
 };
 
@@ -146,7 +149,7 @@ const controller = {
           this.currentState = GAME_STATE.CardsMatched;
           view.pairCards(...model.revealedCards);
           model.revealedCards = [];
-          if (model.score === 260) {
+          if (model.score === 10) {
             console.log("showGameFinished");
             this.currentState = GAME_STATE.GameFinished;
             view.showGameFinished();
@@ -172,6 +175,23 @@ const controller = {
     view.flipCards(...model.revealedCards);
     model.revealedCards = [];
     controller.currentState = GAME_STATE.FirstCardAwaits;
+  },
+  resetGameClicked() {
+    //重新設置遊戲
+    const finished = document.querySelector(".completed");
+    finished.remove();
+    console.log(finished);
+    model.score = 0;
+    view.renderScore(model.score);
+    model.triedTimes = 0;
+    view.renderTriedTimes(model.triedTimes);
+    controller.currentState = GAME_STATE.FirstCardAwaits;
+    controller.generateCards();
+    document.querySelectorAll(".card").forEach((card) => {
+      card.addEventListener("click", (event) => {
+        controller.dispatchCardAction(card);
+      });
+    });
   },
 };
 
